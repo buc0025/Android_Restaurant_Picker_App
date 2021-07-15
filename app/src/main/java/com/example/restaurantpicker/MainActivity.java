@@ -8,18 +8,25 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity {
+    private TextView testUid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        testUid = findViewById(R.id.testUid);
+        String uid = FirebaseAuth.getInstance().getUid();
+
+        testUid.setText(uid);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
     }

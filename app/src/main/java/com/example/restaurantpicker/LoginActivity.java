@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         edtLoginEmail = findViewById(R.id.edtLoginEmail);
-        edtLoginPassword = findViewById(R.id.edtPassword);
+        edtLoginPassword = findViewById(R.id.edtLoginPassword);
         needToRegister = findViewById(R.id.needToRegister);
         loginBtn = findViewById(R.id.loginBtn);
 
@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(LoginActivity.this, "blahblahblah", Toast.LENGTH_SHORT).show();
                 String email = edtLoginEmail.getText().toString().trim();
                 String password = edtLoginPassword.getText().toString().trim();
 
@@ -62,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, "Login successful", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                         } else {
