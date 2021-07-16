@@ -11,7 +11,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RestaurantPicker">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".LocationActivity"></activity>
+        <activity android:name=".LoginActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".RegistrationActivity">
             <intent-filter>
