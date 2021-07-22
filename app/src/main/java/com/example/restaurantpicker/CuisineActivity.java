@@ -8,27 +8,15 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.Spinner;
 
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LocationActivity extends AppCompatActivity {
-    private Spinner spinnerMilesRadius;
-    private Button btnLocation;
+public class CuisineActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
-
-        spinnerMilesRadius = findViewById(R.id.spinnerMilesRadius);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.milesRadius, android.R.layout.simple_spinner_item);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerMilesRadius.setAdapter(adapter);
-
-
+        setContentView(R.layout.activity_cuisine);
     }
 
     @Override
@@ -42,7 +30,7 @@ public class LocationActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(LocationActivity.this, LoginActivity.class);
+            Intent intent = new Intent(CuisineActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
