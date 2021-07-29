@@ -15,13 +15,26 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LocationActivity extends AppCompatActivity {
     private Spinner spinnerMilesRadius;
     private Button btnLocation;
     private EditText edtZipCode;
+    private TextView textViewRestaurant;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,20 +48,48 @@ public class LocationActivity extends AppCompatActivity {
 
         btnLocation = findViewById(R.id.btnLocation);
         edtZipCode = findViewById(R.id.edtZipCode);
+        textViewRestaurant = findViewById(R.id.textViewRestaurant);
+
+        requestQueue = Volley.newRequestQueue(this);
 
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String zipCode = edtZipCode.getText().toString();
-                if (zipCode.length() != 5) {
-                    zipCodeDialog();
-                } else {
-                    Intent intent = new Intent(LocationActivity.this, CuisineActivity.class);
-                    startActivity(intent);
-                }
+                jsonParse();
+//                String zipCode = edtZipCode.getText().toString();
+//                if (zipCode.length() != 5) {
+//                    zipCodeDialog();
+//                } else {
+//                    Intent intent = new Intent(LocationActivity.this, CuisineActivity.class);
+//                    startActivity(intent);
+//                }
             }
         });
 
+    }
+
+    private void jsonParse() {
+        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("businesses");
+                            JSONObject business = jsonArray.getJSONObject(0);
+                            String restaurant = business.getString("name");
+                            textViewRestaurant.setText(restaurant);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
     }
 
     private void zipCodeDialog() {
