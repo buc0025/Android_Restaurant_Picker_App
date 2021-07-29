@@ -69,17 +69,28 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void jsonParse() {
-        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
+//        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
+        String url = "https://api.publicapis.org/entries";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-                            JSONArray jsonArray = response.getJSONArray("businesses");
-                            JSONObject business = jsonArray.getJSONObject(0);
-                            String restaurant = business.getString("name");
-                            textViewRestaurant.setText(restaurant);
+//                            JSONArray jsonArray = response.getJSONArray("businesses");
+                            JSONArray jsonArray = response.getJSONArray("entries");
+
+                            for (int i = 0; i < 7; i++) {
+                                JSONObject entry = jsonArray.getJSONObject(i);
+                                String api = entry.getString("API");
+                                String description = entry.getString("Description");
+
+                                textViewRestaurant.append(api + ": " + description + "\n\n");
+                            }
+//                            JSONObject business = jsonArray.getJSONObject(0);
+//                            String restaurant = business.getString("name");
+//                            String restaurant = business.getString("API");
+//                            textViewRestaurant.setText(restaurant);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -90,6 +101,7 @@ public class LocationActivity extends AppCompatActivity {
                 error.printStackTrace();
             }
         });
+        requestQueue.add(request);
     }
 
     private void zipCodeDialog() {
