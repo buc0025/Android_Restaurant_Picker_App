@@ -1,9 +1,5 @@
 package com.example.restaurantpicker;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,6 +13,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,6 +29,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity {
     private Spinner spinnerMilesRadius;
@@ -69,28 +73,28 @@ public class LocationActivity extends AppCompatActivity {
     }
 
     private void jsonParse() {
-//        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
-        String url = "https://api.publicapis.org/entries";
+        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
+//        String url = "https://api.publicapis.org/entries";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
-//                            JSONArray jsonArray = response.getJSONArray("businesses");
-                            JSONArray jsonArray = response.getJSONArray("entries");
+                            JSONArray jsonArray = response.getJSONArray("businesses");
+//                            JSONArray jsonArray = response.getJSONArray("entries");
 
-                            for (int i = 0; i < 7; i++) {
-                                JSONObject entry = jsonArray.getJSONObject(i);
-                                String api = entry.getString("API");
-                                String description = entry.getString("Description");
-
-                                textViewRestaurant.append(api + ": " + description + "\n\n");
-                            }
-//                            JSONObject business = jsonArray.getJSONObject(0);
-//                            String restaurant = business.getString("name");
+//                            for (int i = 0; i < 7; i++) {
+//                                JSONObject entry = jsonArray.getJSONObject(i);
+//                                String api = entry.getString("API");
+//                                String description = entry.getString("Description");
+//
+//                                textViewRestaurant.append(api + ": " + description + "\n\n");
+//                            }
+                            JSONObject business = jsonArray.getJSONObject(0);
+                            String restaurant = business.getString("name");
 //                            String restaurant = business.getString("API");
-//                            textViewRestaurant.setText(restaurant);
+                            textViewRestaurant.setText(restaurant);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -100,7 +104,17 @@ public class LocationActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-        });
+
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer y43TARnbjXmLlswBS0FdDZqIFk9KytIpXuE2gOh_5LK2yLv2OxOkIvMV-Dng0uIf66p_2eZtU9NZ46VrGrdUZMViBmjwySlFwbd_diB7S2dslBV4gwxw6kCQxTjRYHYx");
+                return headers;
+            }
+        };
         requestQueue.add(request);
     }
 
