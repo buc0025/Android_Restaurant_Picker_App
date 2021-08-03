@@ -3,6 +3,8 @@ package com.example.restaurantpicker;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -56,6 +58,29 @@ public class LocationActivity extends AppCompatActivity {
 
         requestQueue = Volley.newRequestQueue(this);
 
+        btnLocation.setEnabled(false);
+
+        edtZipCode.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                btnLocation.setEnabled(false);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length() != 5) {
+                    btnLocation.setEnabled(false);
+                } else {
+                    btnLocation.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,17 +109,18 @@ public class LocationActivity extends AppCompatActivity {
                             JSONArray jsonArray = response.getJSONArray("businesses");
 //                            JSONArray jsonArray = response.getJSONArray("entries");
 
-//                            for (int i = 0; i < 7; i++) {
-//                                JSONObject entry = jsonArray.getJSONObject(i);
+                            for (int i = 0; i < 5; i++) {
+                                JSONObject entry = jsonArray.getJSONObject(i);
 //                                String api = entry.getString("API");
+                                String api = entry.getString("name");
 //                                String description = entry.getString("Description");
-//
-//                                textViewRestaurant.append(api + ": " + description + "\n\n");
-//                            }
-                            JSONObject business = jsonArray.getJSONObject(0);
-                            String restaurant = business.getString("name");
+
+                                textViewRestaurant.append(api + ": "  + "\n\n");
+                            }
+//                            JSONObject business = jsonArray.getJSONObject(0);
+//                            String restaurant = business.getString("name");
 //                            String restaurant = business.getString("API");
-                            textViewRestaurant.setText(restaurant);
+//                            textViewRestaurant.setText(restaurant);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
