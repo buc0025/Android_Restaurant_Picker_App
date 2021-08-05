@@ -11,9 +11,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -41,6 +45,9 @@ public class LocationActivity extends AppCompatActivity {
     private EditText edtZipCode;
     private TextView textViewRestaurant;
     private RequestQueue requestQueue;
+    private RadioGroup radioGroup;
+    private RadioButton opened, closed;
+    private CheckBox chineseBox, japaneseBox, italianBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +62,9 @@ public class LocationActivity extends AppCompatActivity {
         btnLocation = findViewById(R.id.btnLocation);
         edtZipCode = findViewById(R.id.edtZipCode);
         textViewRestaurant = findViewById(R.id.textViewRestaurant);
+        radioGroup = findViewById(R.id.radioGroup);
+        chineseBox = findViewById(R.id.chineseBox);
+
 
         requestQueue = Volley.newRequestQueue(this);
 
@@ -84,14 +94,22 @@ public class LocationActivity extends AppCompatActivity {
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                jsonParse();
+//                jsonParse();
 //                String zipCode = edtZipCode.getText().toString();
 //                if (zipCode.length() != 5) {
 //                    zipCodeDialog();
 //                } else {
-//                    Intent intent = new Intent(LocationActivity.this, CuisineActivity.class);
-//                    startActivity(intent);
+                    Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+                    startActivity(intent);
 //                }
+                int radioId = radioGroup.getCheckedRadioButtonId();
+                opened = findViewById(radioId);
+                String s = "work";
+                if (opened.getText().equals("closed")) {
+                    s = "closed";
+                }
+
+                Toast.makeText(LocationActivity.this, "selected radio button is: " + s, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -99,7 +117,6 @@ public class LocationActivity extends AppCompatActivity {
 
     private void jsonParse() {
         String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
-//        String url = "https://api.publicapis.org/entries";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -107,20 +124,13 @@ public class LocationActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             JSONArray jsonArray = response.getJSONArray("businesses");
-//                            JSONArray jsonArray = response.getJSONArray("entries");
 
                             for (int i = 0; i < 5; i++) {
                                 JSONObject entry = jsonArray.getJSONObject(i);
-//                                String api = entry.getString("API");
                                 String api = entry.getString("name");
-//                                String description = entry.getString("Description");
 
                                 textViewRestaurant.append(api + ": "  + "\n\n");
                             }
-//                            JSONObject business = jsonArray.getJSONObject(0);
-//                            String restaurant = business.getString("name");
-//                            String restaurant = business.getString("API");
-//                            textViewRestaurant.setText(restaurant);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -154,6 +164,13 @@ public class LocationActivity extends AppCompatActivity {
                     }
                 })
                 .create().show();
+    }
+
+    public void checkButton(View view) {
+        int radioId = radioGroup.getCheckedRadioButtonId();
+        opened = findViewById(radioId);
+
+        Toast.makeText(this, "selected radio button is: " + opened.getText(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -87,20 +87,25 @@
             app:layout_constraintStart_toStartOf="@id/guideline1"
             app:layout_constraintTop_toBottomOf="@id/textViewRestaurant">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <CheckBox
+                android:id="@+id/chineseBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="asdf" />
+                android:text="Chinese" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <CheckBox
+                android:id="@+id/japaneseBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="asdf" />
+                android:text="Japanese" />
 
-            <TextView
-                android:layout_width="wrap_content"
+            <CheckBox
+                android:id="@+id/italianBox"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="asdf" />
+                android:text="Italian" />
+
+
         </LinearLayout>
 
         <Button
