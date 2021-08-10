@@ -39,7 +39,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
@@ -52,7 +51,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     private RadioButton opened, closed;
     private CheckBox chineseBox, japaneseBox, italianBox;
     private ArrayList<String> cuisines;
-    private String choice;
+    private String milesRadius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,20 +145,20 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 //                }
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 opened = findViewById(radioId);
-                String s = "opened";
+                String openedNow = "opened";
                 if (opened.getText().equals("closed")) {
-                    s = "closed";
+                    openedNow = "closed";
                 }
 
-                Toast.makeText(LocationActivity.this, "selected radio button is: " + choice, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT).show();
 
                 Intent intent = new Intent(LocationActivity.this, MainActivity.class);
 
-                intent.putExtra("radius", choice);
+                intent.putExtra("radius", milesRadius);
                 intent.putExtra("zipcode", edtZipCode.getText().toString());
-                intent.putExtra("opened", s);
-
+                intent.putExtra("opened", openedNow);
                 intent.putExtra("cuisines", cuisines);
+
                 startActivity(intent);
             }
         });
@@ -251,7 +250,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     // for spinner
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        choice = parent.getItemAtPosition(position).toString();
+        milesRadius = parent.getItemAtPosition(position).toString();
     }
 
     // for spinner

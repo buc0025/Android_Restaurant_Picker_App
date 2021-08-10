@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView testUid, mainZipCode, mainMiles, mainCuisine, mainOpened;
     private RequestQueue requestQueue;
     private String zipcode, radius, opened;
+    private ArrayList<String> cuisines;
 
 
     @Override
@@ -57,10 +59,12 @@ public class MainActivity extends AppCompatActivity {
         zipcode = intent.getExtras().getString("zipcode");
         radius = intent.getExtras().getString("radius");
         opened = intent.getExtras().getString("opened");
+        cuisines = (ArrayList<String>) getIntent().getSerializableExtra("cuisines");
 
         mainZipCode.setText(zipcode);
         mainMiles.setText(radius);
         mainOpened.setText(opened);
+        mainCuisine.setText(cuisines.get(0));
 
         jsonParse();
 
@@ -70,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     private void jsonParse() {
         StringBuilder stringBuilder = new StringBuilder();
         String url = "https://api.yelp.com/v3/businesses/search?term=food&location=";
-        url = url + zipcode;
+        url = url + zipcode + "&categories=" + cuisines.get(0);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
