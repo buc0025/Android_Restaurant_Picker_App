@@ -165,45 +165,6 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
     }
 
-    private void jsonParse() {
-        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            JSONArray jsonArray = response.getJSONArray("businesses");
-
-                            for (int i = 0; i < 5; i++) {
-                                JSONObject entry = jsonArray.getJSONObject(i);
-                                String api = entry.getString("name");
-
-                                textViewRestaurant.append(api + ": "  + "\n\n");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-
-
-        }) {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                HashMap<String, String> headers = new HashMap<String, String>();
-                //headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer y43TARnbjXmLlswBS0FdDZqIFk9KytIpXuE2gOh_5LK2yLv2OxOkIvMV-Dng0uIf66p_2eZtU9NZ46VrGrdUZMViBmjwySlFwbd_diB7S2dslBV4gwxw6kCQxTjRYHYx");
-                return headers;
-            }
-        };
-        requestQueue.add(request);
-    }
-
     private void zipCodeDialog() {
         new AlertDialog.Builder(this)
                 .setMessage("Zip code is invalid.")
@@ -214,13 +175,6 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
                     }
                 })
                 .create().show();
-    }
-
-    public void checkButton(View view) {
-        int radioId = radioGroup.getCheckedRadioButtonId();
-        opened = findViewById(radioId);
-
-        Toast.makeText(this, "selected radio button is: " + opened.getText(), Toast.LENGTH_SHORT).show();
     }
 
     @Override
