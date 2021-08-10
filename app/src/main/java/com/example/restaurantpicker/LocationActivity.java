@@ -9,6 +9,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,10 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class LocationActivity extends AppCompatActivity {
+public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
     private Spinner spinnerMilesRadius;
     private Button btnLocation;
     private EditText edtZipCode;
@@ -48,6 +51,8 @@ public class LocationActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private RadioButton opened, closed;
     private CheckBox chineseBox, japaneseBox, italianBox;
+    private ArrayList<String> cuisines;
+    private String choice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,26 +63,21 @@ public class LocationActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.milesRadius, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMilesRadius.setAdapter(adapter);
+        spinnerMilesRadius.setOnItemSelectedListener(this);
 
         btnLocation = findViewById(R.id.btnLocation);
         edtZipCode = findViewById(R.id.edtZipCode);
         textViewRestaurant = findViewById(R.id.textViewRestaurant);
         radioGroup = findViewById(R.id.radioGroup);
         chineseBox = findViewById(R.id.chineseBox);
+        japaneseBox = findViewById(R.id.japaneseBox);
+        italianBox = findViewById(R.id.italianBox);
+        cuisines = new ArrayList<>();
 
 
         requestQueue = Volley.newRequestQueue(this);
 
         btnLocation.setEnabled(false);
-
-        chineseBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (chineseBox.isChecked()) {
-                    Toast.makeText(LocationActivity.this, "chinese is checked", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
 
         edtZipCode.addTextChangedListener(new TextWatcher() {
             @Override
@@ -100,6 +100,39 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
 
+        chineseBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (chineseBox.isChecked()) {
+                    cuisines.add("chinese");
+                } else {
+                    cuisines.remove("chinese");
+                }
+            }
+        });
+
+        japaneseBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (japaneseBox.isChecked()) {
+                    cuisines.add("japanese");
+                } else {
+                    cuisines.remove("japanese");
+                }
+            }
+        });
+
+        italianBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (italianBox.isChecked()) {
+                    cuisines.add("italian");
+                } else {
+                    cuisines.remove("italian");
+                }
+            }
+        });
+
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,17 +141,26 @@ public class LocationActivity extends AppCompatActivity {
 //                if (zipCode.length() != 5) {
 //                    zipCodeDialog();
 //                } else {
-                    Intent intent = new Intent(LocationActivity.this, MainActivity.class);
-                    startActivity(intent);
+//                    Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+//                    startActivity(intent);
 //                }
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 opened = findViewById(radioId);
-                String s = "work";
+                String s = "opened";
                 if (opened.getText().equals("closed")) {
                     s = "closed";
                 }
 
-                Toast.makeText(LocationActivity.this, "selected radio button is: " + s, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "selected radio button is: " + choice, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+
+                intent.putExtra("radius", choice);
+                intent.putExtra("zipcode", edtZipCode.getText().toString());
+                intent.putExtra("opened", s);
+
+                intent.putExtra("cuisines", cuisines);
+                startActivity(intent);
             }
         });
 
@@ -198,5 +240,23 @@ public class LocationActivity extends AppCompatActivity {
             finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    // for spinner
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    // for spinner
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        choice = parent.getItemAtPosition(position).toString();
+    }
+
+    // for spinner
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

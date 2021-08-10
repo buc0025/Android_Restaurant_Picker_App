@@ -29,8 +29,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private TextView testUid;
+    private TextView testUid, mainZipCode, mainMiles, mainCuisine, mainOpened;
     private RequestQueue requestQueue;
+    private String zipcode, radius, opened;
 
 
     @Override
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         testUid = findViewById(R.id.testUid);
+        mainZipCode = findViewById(R.id.mainZipCode);
+        mainMiles = findViewById(R.id.mainMiles);
+        mainCuisine = findViewById(R.id.mainCuisine);
+        mainOpened = findViewById(R.id.mainOpened);
         String uid = FirebaseAuth.getInstance().getUid();
 
 //        testUid.setText(uid);
@@ -46,13 +51,26 @@ public class MainActivity extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
+
+
+        Intent intent = getIntent();
+        zipcode = intent.getExtras().getString("zipcode");
+        radius = intent.getExtras().getString("radius");
+        opened = intent.getExtras().getString("opened");
+
+        mainZipCode.setText(zipcode);
+        mainMiles.setText(radius);
+        mainOpened.setText(opened);
+
         jsonParse();
 
 
     }
 
     private void jsonParse() {
-        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02343";
+        StringBuilder stringBuilder = new StringBuilder();
+        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=";
+        url = url + zipcode;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
