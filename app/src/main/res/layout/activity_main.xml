@@ -22,7 +22,6 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="140dp"
         android:layout_marginTop="32dp"
-        android:text="result"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
