@@ -58,6 +58,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
 
+        // Creating adapter for spinner
         spinnerMilesRadius = findViewById(R.id.spinnerMilesRadius);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.milesRadius, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -78,6 +79,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
         btnLocation.setEnabled(false);
 
+        // Zip code has to be 5 digits or else apply button is whited out
         edtZipCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

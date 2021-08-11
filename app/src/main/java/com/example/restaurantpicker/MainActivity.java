@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private TextView testUid, mainZipCode, mainMiles, mainCuisine, mainOpened;
@@ -67,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         mainCuisine.setText(cuisines.get(0));
 
         jsonParse();
-
-
     }
 
     private void jsonParse() {
@@ -83,12 +82,14 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONArray("businesses");
 
-                            for (int i = 0; i < 5; i++) {
-                                JSONObject entry = jsonArray.getJSONObject(i);
+                            Random random = new Random();
+                            int n = random.nextInt(jsonArray.length());
+//                            for (int i = 0; i < 5; i++) {
+                                JSONObject entry = jsonArray.getJSONObject(n);
                                 String api = entry.getString("name");
 
                                 testUid.append(api + ": "  + "\n\n");
-                            }
+//                            }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -98,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 error.printStackTrace();
             }
-
 
         }) {
             @Override
