@@ -14,6 +14,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -43,7 +44,7 @@ import java.util.Map;
 
 public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
     private Spinner spinnerMilesRadius;
-    private Button btnLocation;
+    private Button btnLocation, btnClear;
     private EditText edtZipCode;
     private RequestQueue requestQueue;
     private RadioGroup radioGroup;
@@ -51,6 +52,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     private CheckBox chineseBox, japaneseBox, italianBox, indianBox, vegetarianBox, koreanBox;
     private ArrayList<String> cuisines;
     private String milesRadius;
+    private LinearLayout linLayout1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +76,9 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
         vegetarianBox = findViewById(R.id.vegetarianBox);
         koreanBox = findViewById(R.id.koreanBox);
         cuisines = new ArrayList<>();
+
+        btnClear = findViewById(R.id.btnClear);
+        linLayout1 = findViewById(R.id.linLayout1);
 
 
         requestQueue = Volley.newRequestQueue(this);
@@ -196,6 +201,21 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
                 intent.putExtra("cuisines", cuisines);
 
                 startActivity(intent);
+            }
+        });
+
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int numCheckboxes = linLayout1.getChildCount();
+                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes, Toast.LENGTH_SHORT).show();
+
+                for (int i = 0; i < numCheckboxes; i++) {
+                    v = linLayout1.getChildAt(i);
+                    if (v instanceof CheckBox) {
+                        ((CheckBox) v).setChecked(false);
+                    }
+                }
             }
         });
 

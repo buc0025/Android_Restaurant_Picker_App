@@ -80,6 +80,7 @@
             app:layout_constraintTop_toBottomOf="@+id/edtZipCode" />
 
         <LinearLayout
+            android:id="@+id/linLayout1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -174,6 +175,16 @@
                         android:layout_height="wrap_content"
                         android:text="closed" />
             </RadioGroup>
+
+        <Button
+            android:id="@+id/btnClear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="524dp"
+            android:text="Clear"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
