@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         mainZipCode.setText(zipcode);
         mainMiles.setText(radius);
         mainOpened.setText(opened);
-        mainCuisine.setText(cuisines.get(0));
+//        mainCuisine.setText(cuisines.get(0));
 
         jsonParse();
     }
@@ -77,13 +77,16 @@ public class MainActivity extends AppCompatActivity {
         stringBuilder.append(startUrl);
         stringBuilder.append(zipcode);
         stringBuilder.append("&radius=" + milesToMeters);
-        stringBuilder.append("&categories=");
 
-        for (int i = 0; i < cuisines.size(); i++) {
-            if (i == cuisines.size() - 1) {
-                stringBuilder.append(cuisines.get(i));
-            } else {
-                stringBuilder.append(cuisines.get(i) + ",");
+        if (cuisines.size() > 0) {
+            stringBuilder.append("&categories=");
+
+            for (int i = 0; i < cuisines.size(); i++) {
+                if (i == cuisines.size() - 1) {
+                    stringBuilder.append(cuisines.get(i));
+                } else {
+                    stringBuilder.append(cuisines.get(i) + ",");
+                }
             }
         }
 

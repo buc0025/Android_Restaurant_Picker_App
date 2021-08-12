@@ -52,7 +52,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     private CheckBox chineseBox, japaneseBox, italianBox, indianBox, vegetarianBox, koreanBox;
     private ArrayList<String> cuisines;
     private String milesRadius;
-    private LinearLayout linLayout1;
+    private LinearLayout linLayout1, linLayout2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,11 +79,14 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
         btnClear = findViewById(R.id.btnClear);
         linLayout1 = findViewById(R.id.linLayout1);
+        linLayout2 = findViewById(R.id.linLayout2);
 
 
         requestQueue = Volley.newRequestQueue(this);
 
         btnLocation.setEnabled(false);
+
+        checkboxesClicked();
 
         // Zip code has to be 5 digits or else apply button is whited out
         edtZipCode.addTextChangedListener(new TextWatcher() {
@@ -107,6 +110,34 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
+        btnLocation.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int radioId = radioGroup.getCheckedRadioButtonId();
+                opened = findViewById(radioId);
+                String openedNow = "true";
+                if (opened.getText().equals("closed")) {
+                    openedNow = "false";
+                }
+
+                Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT).show();
+
+                Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+
+                intent.putExtra("radius", milesRadius);
+                intent.putExtra("zipcode", edtZipCode.getText().toString());
+                intent.putExtra("opened", openedNow);
+                intent.putExtra("cuisines", cuisines);
+
+                startActivity(intent);
+            }
+        });
+
+        clearButtonClicked();
+
+    }
+
+    private void checkboxesClicked() {
         chineseBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -172,65 +203,33 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
                 }
             }
         });
+    }
 
-        btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                jsonParse();
-//                String zipCode = edtZipCode.getText().toString();
-//                if (zipCode.length() != 5) {
-//                    zipCodeDialog();
-//                } else {
-//                    Intent intent = new Intent(LocationActivity.this, MainActivity.class);
-//                    startActivity(intent);
-//                }
-                int radioId = radioGroup.getCheckedRadioButtonId();
-                opened = findViewById(radioId);
-                String openedNow = "true";
-                if (opened.getText().equals("closed")) {
-                    openedNow = "false";
-                }
-
-                Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(LocationActivity.this, MainActivity.class);
-
-                intent.putExtra("radius", milesRadius);
-                intent.putExtra("zipcode", edtZipCode.getText().toString());
-                intent.putExtra("opened", openedNow);
-                intent.putExtra("cuisines", cuisines);
-
-                startActivity(intent);
-            }
-        });
-
+    private void clearButtonClicked() {
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int numCheckboxes = linLayout1.getChildCount();
-                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes, Toast.LENGTH_SHORT).show();
+                int numCheckboxes1 = linLayout1.getChildCount();
+                int numCheckboxes2 = linLayout2.getChildCount();
+                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes1, Toast.LENGTH_SHORT).show();
 
-                for (int i = 0; i < numCheckboxes; i++) {
+                for (int i = 0; i < numCheckboxes1; i++) {
                     v = linLayout1.getChildAt(i);
                     if (v instanceof CheckBox) {
                         ((CheckBox) v).setChecked(false);
                     }
                 }
+
+                for (int i = 0; i < numCheckboxes2; i++) {
+                    v = linLayout2.getChildAt(i);
+                    if (v instanceof CheckBox) {
+                        ((CheckBox) v).setChecked(false);
+                    }
+                }
+                cuisines.clear();
+                edtZipCode.getText().clear();
             }
         });
-
-    }
-
-    private void zipCodeDialog() {
-        new AlertDialog.Builder(this)
-                .setMessage("Zip code is invalid.")
-                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .create().show();
     }
 
     @Override
