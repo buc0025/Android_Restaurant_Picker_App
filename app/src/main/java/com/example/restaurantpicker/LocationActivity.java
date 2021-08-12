@@ -45,11 +45,10 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     private Spinner spinnerMilesRadius;
     private Button btnLocation;
     private EditText edtZipCode;
-    private TextView textViewRestaurant;
     private RequestQueue requestQueue;
     private RadioGroup radioGroup;
     private RadioButton opened, closed;
-    private CheckBox chineseBox, japaneseBox, italianBox;
+    private CheckBox chineseBox, japaneseBox, italianBox, indianBox, vegetarianBox, koreanBox;
     private ArrayList<String> cuisines;
     private String milesRadius;
 
@@ -67,11 +66,13 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
         btnLocation = findViewById(R.id.btnLocation);
         edtZipCode = findViewById(R.id.edtZipCode);
-        textViewRestaurant = findViewById(R.id.textViewRestaurant);
         radioGroup = findViewById(R.id.radioGroup);
         chineseBox = findViewById(R.id.chineseBox);
         japaneseBox = findViewById(R.id.japaneseBox);
         italianBox = findViewById(R.id.italianBox);
+        indianBox = findViewById(R.id.indianBox);
+        vegetarianBox = findViewById(R.id.vegetarianBox);
+        koreanBox = findViewById(R.id.koreanBox);
         cuisines = new ArrayList<>();
 
 
@@ -134,6 +135,39 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
+        indianBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (indianBox.isChecked()) {
+                    cuisines.add("indian");
+                } else {
+                    cuisines.remove("indian");
+                }
+            }
+        });
+
+        vegetarianBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (vegetarianBox.isChecked()) {
+                    cuisines.add("vegetarian");
+                } else {
+                    cuisines.remove("vegetarian");
+                }
+            }
+        });
+
+        koreanBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (koreanBox.isChecked()) {
+                    cuisines.add("korean");
+                } else {
+                    cuisines.remove("korean");
+                }
+            }
+        });
+
         btnLocation.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,9 +181,9 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 //                }
                 int radioId = radioGroup.getCheckedRadioButtonId();
                 opened = findViewById(radioId);
-                String openedNow = "opened";
+                String openedNow = "true";
                 if (opened.getText().equals("closed")) {
-                    openedNow = "closed";
+                    openedNow = "false";
                 }
 
                 Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT).show();

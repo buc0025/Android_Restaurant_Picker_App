@@ -67,13 +67,13 @@
             app:layout_constraintTop_toBottomOf="@+id/textMilesRadius" />
 
         <TextView
-            android:id="@+id/textViewRestaurant"
+            android:id="@+id/textViewCuisines"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="40dp"
-            android:text="restaurants"
+            android:text="Cuisines"
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -85,7 +85,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/radioGroup"
             app:layout_constraintStart_toStartOf="@id/guideline1"
-            app:layout_constraintTop_toBottomOf="@id/textViewRestaurant">
+            app:layout_constraintTop_toBottomOf="@id/textViewCuisines">
 
             <CheckBox
                 android:id="@+id/chineseBox"
@@ -104,6 +104,34 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Italian" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/radioGroup"
+            app:layout_constraintStart_toStartOf="@id/guideline2"
+            app:layout_constraintTop_toBottomOf="@id/textViewCuisines">
+
+            <CheckBox
+                android:id="@+id/indianBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Indian" />
+
+            <CheckBox
+                android:id="@+id/vegetarianBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Vegetarian" />
+
+            <CheckBox
+                android:id="@+id/koreanBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Korean" />
 
 
         </LinearLayout>

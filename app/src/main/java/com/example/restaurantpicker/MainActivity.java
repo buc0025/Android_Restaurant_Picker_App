@@ -71,9 +71,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void jsonParse() {
+        int milesToMeters = Integer.valueOf(radius) * 1609;
         StringBuilder stringBuilder = new StringBuilder();
-        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=";
-        url = url + zipcode + "&categories=" + cuisines.get(0);
+        String startUrl = "https://api.yelp.com/v3/businesses/search?term=food&location=";
+        stringBuilder.append(startUrl);
+        stringBuilder.append(zipcode);
+        stringBuilder.append("&radius=" + milesToMeters);
+        stringBuilder.append("&categories=");
+
+        for (int i = 0; i < cuisines.size(); i++) {
+            if (i == cuisines.size() - 1) {
+                stringBuilder.append(cuisines.get(i));
+            } else {
+                stringBuilder.append(cuisines.get(i) + ",");
+            }
+        }
+
+        stringBuilder.append("&open_now=" + opened);
+
+        String url = stringBuilder.toString();
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -82,14 +98,18 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             JSONArray jsonArray = response.getJSONArray("businesses");
 
-                            Random random = new Random();
-                            int n = random.nextInt(jsonArray.length());
+                            if (jsonArray.length() == 0) {
+                                testUid.append("No restaurants matches your criteria");
+                            } else {
+                                Random random = new Random();
+                                int n = random.nextInt(jsonArray.length());
 //                            for (int i = 0; i < 5; i++) {
                                 JSONObject entry = jsonArray.getJSONObject(n);
                                 String api = entry.getString("name");
-
                                 testUid.append(api + ": "  + "\n\n");
 //                            }
+                            }
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
