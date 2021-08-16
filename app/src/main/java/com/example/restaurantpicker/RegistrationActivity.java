@@ -42,9 +42,10 @@ public class RegistrationActivity extends AppCompatActivity {
 
         // Check if user is already logged in. Send them to main activity if they are logged in.
         if (firebaseAuth.getCurrentUser() != null) {
-            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            FirebaseAuth.getInstance().signOut();
+//            Intent intent = new Intent(RegistrationActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
         }
 
         registerBtn.setOnClickListener(new View.OnClickListener() {

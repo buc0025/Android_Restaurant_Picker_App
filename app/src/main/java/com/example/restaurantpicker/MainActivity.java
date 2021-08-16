@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
 
-        // Comment lines 60-71 if compiling when user is not logged out
+//         Comment lines 60-71 if compiling when user is not logged out
         Intent intent = getIntent();
         zipcode = intent.getExtras().getString("zipcode");
         radius = intent.getExtras().getString("radius");
