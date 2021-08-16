@@ -1,6 +1,5 @@
 package com.example.restaurantpicker;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -18,33 +17,22 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemSelectedListener {
+public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
+        AdapterView.OnItemSelectedListener {
     private Spinner spinnerMilesRadius;
-    private Button btnLocation, btnClear;
+    private Button btnApply, btnClear;
     private EditText edtZipCode;
     private RequestQueue requestQueue;
     private RadioGroup radioGroup;
@@ -53,6 +41,8 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     private ArrayList<String> cuisines;
     private String milesRadius;
     private LinearLayout linLayout1, linLayout2;
+    private String zipCode;
+    private List<String> cuisineList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,12 +51,13 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
         // Creating adapter for spinner
         spinnerMilesRadius = findViewById(R.id.spinnerMilesRadius);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.milesRadius, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.milesRadius, android.R.layout
+                .simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerMilesRadius.setAdapter(adapter);
         spinnerMilesRadius.setOnItemSelectedListener(this);
 
-        btnLocation = findViewById(R.id.btnLocation);
+        btnApply = findViewById(R.id.btnApply);
         edtZipCode = findViewById(R.id.edtZipCode);
         radioGroup = findViewById(R.id.radioGroup);
         chineseBox = findViewById(R.id.chineseBox);
@@ -84,7 +75,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
 
         requestQueue = Volley.newRequestQueue(this);
 
-        btnLocation.setEnabled(false);
+        btnApply.setEnabled(false);
 
         checkboxesClicked();
 
@@ -92,16 +83,12 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
         edtZipCode.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                btnLocation.setEnabled(false);
+                btnApply.setEnabled(false);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().length() != 5) {
-                    btnLocation.setEnabled(false);
-                } else {
-                    btnLocation.setEnabled(true);
-                }
+                btnApply.setEnabled(s.toString().length() == 5);
             }
 
             @Override
@@ -110,31 +97,27 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        btnLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int radioId = radioGroup.getCheckedRadioButtonId();
-                opened = findViewById(radioId);
-                String openedNow = "true";
-                if (opened.getText().equals("closed")) {
-                    openedNow = "false";
-                }
-
-                Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT).show();
-
-                Intent intent = new Intent(LocationActivity.this, MainActivity.class);
-
-                intent.putExtra("radius", milesRadius);
-                intent.putExtra("zipcode", edtZipCode.getText().toString());
-                intent.putExtra("opened", openedNow);
-                intent.putExtra("cuisines", cuisines);
-
-                startActivity(intent);
+        btnApply.setOnClickListener(v -> {
+            int radioId = radioGroup.getCheckedRadioButtonId();
+            opened = findViewById(radioId);
+            String openedNow = "true";
+            if (opened.getText().equals("closed")) {
+                openedNow = "false";
             }
+
+            Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT)
+                    .show();
+
+            Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+            intent.putExtra("radius", milesRadius);
+            intent.putExtra("zipcode", edtZipCode.getText().toString());
+            intent.putExtra("opened", openedNow);
+            intent.putExtra("cuisines", cuisines);
+
+            startActivity(intent);
         });
 
         clearButtonClicked();
-
     }
 
     private void checkboxesClicked() {
@@ -211,7 +194,8 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
             public void onClick(View v) {
                 int numCheckboxes1 = linLayout1.getChildCount();
                 int numCheckboxes2 = linLayout2.getChildCount();
-                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes1, Toast.LENGTH_SHORT).show();
+                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes1, Toast.LENGTH_SHORT)
+                        .show();
 
                 for (int i = 0; i < numCheckboxes1; i++) {
                     v = linLayout1.getChildAt(i);

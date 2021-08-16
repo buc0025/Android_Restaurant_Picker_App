@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
 
+        // Comment lines 60-71 if compiling when user is not logged out
         Intent intent = getIntent();
         zipcode = intent.getExtras().getString("zipcode");
         radius = intent.getExtras().getString("radius");
@@ -65,18 +66,17 @@ public class MainActivity extends AppCompatActivity {
         mainZipCode.setText(zipcode);
         mainMiles.setText(radius);
         mainOpened.setText(opened);
-//        mainCuisine.setText(cuisines.get(0));
+        mainCuisine.setText(cuisines.get(0));
 
         jsonParse();
     }
 
     private void jsonParse() {
-        int milesToMeters = Integer.valueOf(radius) * 1609;
+        int milesToMeters = Integer.parseInt(radius) * 1609;
         StringBuilder stringBuilder = new StringBuilder();
         String startUrl = "https://api.yelp.com/v3/businesses/search?term=food&location=";
-        stringBuilder.append(startUrl);
-        stringBuilder.append(zipcode);
-        stringBuilder.append("&radius=" + milesToMeters);
+        stringBuilder.append(startUrl).append(zipcode);
+        stringBuilder.append("&radius=").append(milesToMeters);
 
         if (cuisines.size() > 0) {
             stringBuilder.append("&categories=");
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        stringBuilder.append("&open_now=" + opened);
+        stringBuilder.append("&open_now=").append(opened);
 
         String url = stringBuilder.toString();
 
@@ -128,7 +128,8 @@ public class MainActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 HashMap<String, String> headers = new HashMap<String, String>();
                 //headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer y43TARnbjXmLlswBS0FdDZqIFk9KytIpXuE2gOh_5LK2yLv2OxOkIvMV-Dng0uIf66p_2eZtU9NZ46VrGrdUZMViBmjwySlFwbd_diB7S2dslBV4gwxw6kCQxTjRYHYx");
+                headers.put("Authorization", "Bearer y43TARnbjXmLlswBS0FdDZqIFk9KytIpXuE2gOh_5LK2yLv2OxOkIvMV-Dng0uIf66p_" +
+                        "2eZtU9NZ46VrGrdUZMViBmjwySlFwbd_diB7S2dslBV4gwxw6kCQxTjRYHYx");
                 return headers;
             }
         };
