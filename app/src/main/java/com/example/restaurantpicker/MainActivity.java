@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 if (i == cuisines.size() - 1) {
                     stringBuilder.append(cuisines.get(i));
                 } else {
-                    stringBuilder.append(cuisines.get(i) + ",");
+                    stringBuilder.append(cuisines.get(i)).append(",");
                 }
             }
         }

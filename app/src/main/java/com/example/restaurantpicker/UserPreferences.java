@@ -1,15 +1,16 @@
 package com.example.restaurantpicker;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UserPreferences {
 
     private String zipCode;
     private int radius;
-    private List<String> cuisines;
+    private ArrayList<String> cuisines;
     private boolean openNow;
 
-    public UserPreferences(String zipCode, int radius, List<String> cuisines, boolean openNow) {
+    public UserPreferences(String zipCode, int radius, ArrayList<String> cuisines, boolean openNow) {
         this.zipCode = zipCode;
         this.radius = radius;
         this.cuisines = cuisines;
@@ -36,7 +37,7 @@ public class UserPreferences {
         return cuisines;
     }
 
-    public void setCuisines(List<String> cuisines) {
+    public void setCuisines(ArrayList<String> cuisines) {
         this.cuisines = cuisines;
     }
 
