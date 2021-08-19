@@ -43,13 +43,17 @@ public class PreferenceManager {
     }
 
     //Need to add restaurants to UserRestaurants before using this method
-//    public ArrayList<Restaurant> getRestaurant(String uId) {
-//        ArrayList<Restaurant> restaurants = new ArrayList<>();
-//        Gson gson = new Gson();
-//        String json = sharedPreferences.getString(uId, null);
-//        Restaurant obj = gson.fromJson(json, Restaurant.class);
-//
-//    }
+    public ArrayList<Restaurant> getRestaurant(String uId) {
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(uId, null);
+        Restaurant obj = gson.fromJson(json, Restaurant.class);
+
+        for (Restaurant restaurant : obj)
+            //test push
+
+
+    }
 
     public void removeRestaurants(String uId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
