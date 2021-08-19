@@ -22,12 +22,24 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class PreferencesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
         AdapterView.OnItemSelectedListener {
@@ -43,6 +55,7 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
     private LinearLayout linLayout1, linLayout2;
     private String zipCode;
     private List<String> cuisineList;
+    private String restaurantId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +85,7 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
         linLayout1 = findViewById(R.id.linLayout1);
         linLayout2 = findViewById(R.id.linLayout2);
 
-
+        restaurantId = FirebaseAuth.getInstance().getUid() + "_RESTAURANTS";
         requestQueue = Volley.newRequestQueue(this);
 
         btnApply.setEnabled(false);
@@ -108,6 +121,7 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
             Toast.makeText(PreferencesActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT)
                     .show();
 
+            // Saving as sharedpreferences to test in mainactivity
             String zipcode = edtZipCode.getText().toString();
             String uid = FirebaseAuth.getInstance().getUid();
             UserPreferences userPreferences = new UserPreferences(zipcode, milesRadius, cuisines, openedNow);
@@ -125,6 +139,75 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
         });
 
         clearButtonClicked();
+    }
+
+    private void jsonParse() {
+        int milesToMeters = Integer.parseInt(milesRadius) * 1609;
+        StringBuilder stringBuilder = new StringBuilder();
+        String startUrl = "https://api.yelp.com/v3/businesses/search?term=food&location=";
+        stringBuilder.append(startUrl).append(edtZipCode.getText().toString());
+        stringBuilder.append("&radius=").append(milesToMeters);
+
+        if (cuisines.size() > 0) {
+            stringBuilder.append("&categories=");
+
+            for (int i = 0; i < cuisines.size(); i++) {
+                if (i == cuisines.size() - 1) {
+                    stringBuilder.append(cuisines.get(i));
+                } else {
+                    stringBuilder.append(cuisines.get(i)).append(",");
+                }
+            }
+        }
+
+        stringBuilder.append("&open_now=").append(opened);
+
+        String url = stringBuilder.toString();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray jsonArray = response.getJSONArray("businesses");
+
+                            if (jsonArray.length() == 0) {
+//                                testUid.append("No restaurants matches your criteria");
+                            } else {
+                                Random random = new Random();
+                                int n = random.nextInt(jsonArray.length());
+//                            for (int i = 0; i < 5; i++) {
+                                JSONObject entry = jsonArray.getJSONObject(n);
+                                String name = entry.getString("name");
+//                                String address = entry.getJSONArray("location").getString(0);
+                                String address = entry.getString("location");
+                                String phone = entry.getString("display_phone");
+//                                testUid.append(name + ": " + phone + "\n" + address + "\n");
+//                                testUid.append(name + ": "  + "\n\n");
+//                            }
+                            }
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+
+        }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                //headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer y43TARnbjXmLlswBS0FdDZqIFk9KytIpXuE2gOh_5LK2yLv2OxOkIvMV-Dng0uIf66p_" +
+                        "2eZtU9NZ46VrGrdUZMViBmjwySlFwbd_diB7S2dslBV4gwxw6kCQxTjRYHYx");
+                return headers;
+            }
+        };
+        requestQueue.add(request);
     }
 
     private void checkboxesClicked() {

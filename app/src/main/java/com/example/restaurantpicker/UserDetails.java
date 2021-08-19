@@ -1,5 +1,7 @@
 package com.example.restaurantpicker;
 
+import java.util.ArrayList;
+
 public class UserDetails {
 
     private String name;

@@ -63,32 +63,36 @@ public class MainActivity extends AppCompatActivity {
 
 
 //         Comment lines 60-71 if compiling when user is not logged out
-//        Intent intent = getIntent();
-//        zipcode = intent.getExtras().getString("zipcode");
-//        radius = intent.getExtras().getString("radius");
-//        opened = intent.getExtras().getString("opened");
-//        cuisines = (ArrayList<String>) getIntent().getSerializableExtra("cuisines");
-//
-//        mainZipCode.setText(zipcode);
-//        mainMiles.setText(radius);
-//        mainOpened.setText(opened);
-//        mainCuisine.setText(cuisines.get(0));
-//
-//        jsonParse();
+        Intent intent = getIntent();
+        zipcode = intent.getExtras().getString("zipcode");
+        radius = intent.getExtras().getString("radius");
+        opened = intent.getExtras().getString("opened");
+        cuisines = (ArrayList<String>) getIntent().getSerializableExtra("cuisines");
 
-        btnShow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                testUid.append(preferenceManager.getUserPrefs(uid));
-            }
-        });
+        mainZipCode.setText(zipcode);
+        mainMiles.setText(radius);
+        mainOpened.setText(opened);
+        mainCuisine.setText(cuisines.get(0));
 
-        btnDeletePrefs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                preferenceManager.removePrefs(uid);
-            }
-        });
+        jsonParse();
+
+//        btnShow.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ArrayList<String> cuisines = preferenceManager.getUserPrefs(uid);
+//                for (int i = 0; i < cuisines.size(); i++) {
+//                    testUid.append(cuisines.get(i) + "\n");
+//                }
+////                testUid.append(preferenceManager.getUserPrefs(uid));
+//            }
+//        });
+//
+//        btnDeletePrefs.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                preferenceManager.removePrefs(uid);
+//            }
+//        });
     }
 
     private void jsonParse() {
@@ -128,8 +132,12 @@ public class MainActivity extends AppCompatActivity {
                                 int n = random.nextInt(jsonArray.length());
 //                            for (int i = 0; i < 5; i++) {
                                 JSONObject entry = jsonArray.getJSONObject(n);
-                                String api = entry.getString("name");
-                                testUid.append(api + ": "  + "\n\n");
+                                String name = entry.getString("name");
+//                                String address = entry.getJSONArray("location").getString(0);
+                                String address = entry.getString("location");
+                                String phone = entry.getString("display_phone");
+                                testUid.append(name + ": " + phone + "\n" + address + "\n");
+//                                testUid.append(name + ": "  + "\n\n");
 //                            }
                             }
 
