@@ -34,10 +34,10 @@ public class PreferenceManager {
         return cuisines;
     }
 
-    public void saveRestaurants(Restaurant restaurant, String uId) {
+    public void saveRestaurants(ArrayList<Restaurant> restaurants, String uId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
-        String json = gson.toJson(restaurant);
+        String json = gson.toJson(restaurants);
         editor.putString(uId, json);
         editor.apply();
     }

@@ -122,47 +122,32 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
                     .show();
 
             // Saving as sharedpreferences to test in mainactivity
-            String zipcode = edtZipCode.getText().toString();
-            String uid = FirebaseAuth.getInstance().getUid();
-            UserPreferences userPreferences = new UserPreferences(zipcode, milesRadius, cuisines, openedNow);
-            PreferenceManager preferenceManager = new PreferenceManager(PreferencesActivity.this);
-            preferenceManager.savePrefs(userPreferences, uid);
+//            String zipcode = edtZipCode.getText().toString();
+//            String uid = FirebaseAuth.getInstance().getUid();
+//            UserPreferences userPreferences = new UserPreferences(zipcode, milesRadius, cuisines, openedNow);
+//            PreferenceManager preferenceManager = new PreferenceManager(PreferencesActivity.this);
+//            preferenceManager.savePrefs(userPreferences, uid);
+//
+//
+//            Intent intent = new Intent(PreferencesActivity.this, MainActivity.class);
+//            intent.putExtra("radius", milesRadius);
+//            intent.putExtra("zipcode", edtZipCode.getText().toString());
+//            intent.putExtra("opened", openedNow);
+//            intent.putExtra("cuisines", cuisines);
+//
+//            startActivity(intent);
 
-
-            Intent intent = new Intent(PreferencesActivity.this, MainActivity.class);
-            intent.putExtra("radius", milesRadius);
-            intent.putExtra("zipcode", edtZipCode.getText().toString());
-            intent.putExtra("opened", openedNow);
-            intent.putExtra("cuisines", cuisines);
-
-            startActivity(intent);
+            // saving sharedpref key as uId, value as ArrayList<Restaurant>
+            jsonParse();
         });
 
         clearButtonClicked();
     }
 
+    //Testing static inputs
     private void jsonParse() {
-        int milesToMeters = Integer.parseInt(milesRadius) * 1609;
-        StringBuilder stringBuilder = new StringBuilder();
-        String startUrl = "https://api.yelp.com/v3/businesses/search?term=food&location=";
-        stringBuilder.append(startUrl).append(edtZipCode.getText().toString());
-        stringBuilder.append("&radius=").append(milesToMeters);
-
-        if (cuisines.size() > 0) {
-            stringBuilder.append("&categories=");
-
-            for (int i = 0; i < cuisines.size(); i++) {
-                if (i == cuisines.size() - 1) {
-                    stringBuilder.append(cuisines.get(i));
-                } else {
-                    stringBuilder.append(cuisines.get(i)).append(",");
-                }
-            }
-        }
-
-        stringBuilder.append("&open_now=").append(opened);
-
-        String url = stringBuilder.toString();
+        String url = "https://api.yelp.com/v3/businesses/search?term=food&location=02170&categories=chinese&" +
+                "open_now=true&radius=1609";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 new Response.Listener<JSONObject>() {
@@ -173,17 +158,23 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
 
                             if (jsonArray.length() == 0) {
 //                                testUid.append("No restaurants matches your criteria");
+                                Toast.makeText(PreferencesActivity.this, "No restaurants matches your criteria",
+                                        Toast.LENGTH_SHORT).show();
                             } else {
-                                Random random = new Random();
-                                int n = random.nextInt(jsonArray.length());
+//                                Random random = new Random();
+//                                int n = random.nextInt(jsonArray.length());
 //                            for (int i = 0; i < 5; i++) {
-                                JSONObject entry = jsonArray.getJSONObject(n);
+                                JSONObject entry = jsonArray.getJSONObject(0);
                                 String name = entry.getString("name");
-//                                String address = entry.getJSONArray("location").getString(0);
                                 String address = entry.getString("location");
                                 String phone = entry.getString("display_phone");
-//                                testUid.append(name + ": " + phone + "\n" + address + "\n");
-//                                testUid.append(name + ": "  + "\n\n");
+                                ArrayList<Restaurant> restaurantArrayList = new ArrayList<>();
+                                Restaurant restaurant = new Restaurant(name, address, phone);
+                                PreferenceManager preferenceManager = new PreferenceManager(PreferencesActivity.this);
+                                restaurantArrayList.add(restaurant);
+                                preferenceManager.saveRestaurants(restaurantArrayList, restaurantId);
+                                Toast.makeText(PreferencesActivity.this, "saved restaurants",
+                                        Toast.LENGTH_SHORT).show();
 //                            }
                             }
 
