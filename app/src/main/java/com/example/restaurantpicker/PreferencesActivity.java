@@ -163,19 +163,22 @@ public class PreferencesActivity extends AppCompatActivity implements AdapterVie
                             } else {
 //                                Random random = new Random();
 //                                int n = random.nextInt(jsonArray.length());
-//                            for (int i = 0; i < 5; i++) {
-                                JSONObject entry = jsonArray.getJSONObject(0);
-                                String name = entry.getString("name");
-                                String address = entry.getString("location");
-                                String phone = entry.getString("display_phone");
                                 ArrayList<Restaurant> restaurantArrayList = new ArrayList<>();
-                                Restaurant restaurant = new Restaurant(name, address, phone);
                                 PreferenceManager preferenceManager = new PreferenceManager(PreferencesActivity.this);
-                                restaurantArrayList.add(restaurant);
+
+                                for (int i = 0; i < 5; i++) {
+                                    JSONObject entry = jsonArray.getJSONObject(i);
+                                    String name = entry.getString("name");
+                                    String address = entry.getString("location");
+                                    String phone = entry.getString("display_phone");
+
+                                    Restaurant restaurant = new Restaurant(name, address, phone);
+                                    restaurantArrayList.add(restaurant);
+                                }
+
                                 preferenceManager.saveRestaurants(restaurantArrayList, restaurantId);
                                 Toast.makeText(PreferencesActivity.this, "saved restaurants",
                                         Toast.LENGTH_SHORT).show();
-//                            }
                             }
 
                         } catch (JSONException e) {
