@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String zipcode, radius, opened;
     private ArrayList<String> cuisines;
-
+    private Button btnShow;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mainMiles = findViewById(R.id.mainMiles);
         mainCuisine = findViewById(R.id.mainCuisine);
         mainOpened = findViewById(R.id.mainOpened);
+        btnShow = findViewById(R.id.btnShow);
         String uid = FirebaseAuth.getInstance().getUid();
 
 //        testUid.setText(uid);

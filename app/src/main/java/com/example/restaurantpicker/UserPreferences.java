@@ -6,11 +6,11 @@ import java.util.List;
 public class UserPreferences {
 
     private String zipCode;
-    private int radius;
+    private String radius;
     private ArrayList<String> cuisines;
-    private boolean openNow;
+    private String openNow;
 
-    public UserPreferences(String zipCode, int radius, ArrayList<String> cuisines, boolean openNow) {
+    public UserPreferences(String zipCode, String radius, ArrayList<String> cuisines, String openNow) {
         this.zipCode = zipCode;
         this.radius = radius;
         this.cuisines = cuisines;
@@ -25,15 +25,15 @@ public class UserPreferences {
         this.zipCode = zipCode;
     }
 
-    public int getRadius() {
+    public String getRadius() {
         return radius;
     }
 
-    public void setRadius(int radius) {
+    public void setRadius(String radius) {
         this.radius = radius;
     }
 
-    public List<String> getCuisines() {
+    public ArrayList<String> getCuisines() {
         return cuisines;
     }
 
@@ -41,11 +41,11 @@ public class UserPreferences {
         this.cuisines = cuisines;
     }
 
-    public boolean isOpenNow() {
+    public String isOpenNow() {
         return openNow;
     }
 
-    public void setOpenNow(boolean openNow) {
+    public void setOpenNow(String openNow) {
         this.openNow = openNow;
     }
 }

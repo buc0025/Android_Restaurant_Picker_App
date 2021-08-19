@@ -21,4 +21,10 @@ public class PreferenceManager {
         editor.putString(uID, json);
         editor.apply();
     }
+
+    public void removePrefs(String uId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove(uId);
+        editor.apply();
+    }
 }

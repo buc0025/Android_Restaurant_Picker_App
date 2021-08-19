@@ -29,7 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LocationActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
+public class PreferencesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,
         AdapterView.OnItemSelectedListener {
     private Spinner spinnerMilesRadius;
     private Button btnApply, btnClear;
@@ -47,7 +47,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_location);
+        setContentView(R.layout.activity_preferences);
 
         // Creating adapter for spinner
         spinnerMilesRadius = findViewById(R.id.spinnerMilesRadius);
@@ -105,10 +105,17 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
                 openedNow = "false";
             }
 
-            Toast.makeText(LocationActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT)
+            Toast.makeText(PreferencesActivity.this, "selected radio button is: " + milesRadius, Toast.LENGTH_SHORT)
                     .show();
 
-            Intent intent = new Intent(LocationActivity.this, MainActivity.class);
+            String zipcode = edtZipCode.getText().toString();
+            String uid = FirebaseAuth.getInstance().getUid();
+            UserPreferences userPreferences = new UserPreferences(zipcode, milesRadius, cuisines, openedNow);
+            PreferenceManager preferenceManager = new PreferenceManager(PreferencesActivity.this);
+            preferenceManager.savePrefs(userPreferences, uid);
+
+
+            Intent intent = new Intent(PreferencesActivity.this, MainActivity.class);
             intent.putExtra("radius", milesRadius);
             intent.putExtra("zipcode", edtZipCode.getText().toString());
             intent.putExtra("opened", openedNow);
@@ -194,7 +201,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
             public void onClick(View v) {
                 int numCheckboxes1 = linLayout1.getChildCount();
                 int numCheckboxes2 = linLayout2.getChildCount();
-                Toast.makeText(LocationActivity.this, "clear button pressed" + numCheckboxes1, Toast.LENGTH_SHORT)
+                Toast.makeText(PreferencesActivity.this, "clear button pressed" + numCheckboxes1, Toast.LENGTH_SHORT)
                         .show();
 
                 for (int i = 0; i < numCheckboxes1; i++) {
@@ -227,7 +234,7 @@ public class LocationActivity extends AppCompatActivity implements AdapterView.O
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.logout) {
             FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(LocationActivity.this, LoginActivity.class);
+            Intent intent = new Intent(PreferencesActivity.this, LoginActivity.class);
             startActivity(intent);
             finish();
         }
