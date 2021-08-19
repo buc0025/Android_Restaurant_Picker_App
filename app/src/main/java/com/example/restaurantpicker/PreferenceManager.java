@@ -22,6 +22,14 @@ public class PreferenceManager {
         editor.apply();
     }
 
+    public String getUserPrefs(String uId) {
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString(uId, null);
+        UserPreferences obj = gson.fromJson(json, UserPreferences.class);
+        String zipcode = obj.getZipCode();
+        return zipcode;
+    }
+
     public void removePrefs(String uId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(uId);

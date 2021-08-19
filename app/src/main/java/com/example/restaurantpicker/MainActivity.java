@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private RequestQueue requestQueue;
     private String zipcode, radius, opened;
     private ArrayList<String> cuisines;
-    private Button btnShow;
+    private Button btnShow, btnDeletePrefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,28 +50,45 @@ public class MainActivity extends AppCompatActivity {
         mainCuisine = findViewById(R.id.mainCuisine);
         mainOpened = findViewById(R.id.mainOpened);
         btnShow = findViewById(R.id.btnShow);
+        btnDeletePrefs = findViewById(R.id.btnDeletePrefs);
         String uid = FirebaseAuth.getInstance().getUid();
 
 //        testUid.setText(uid);
 
         requestQueue = Volley.newRequestQueue(this);
 
+        PreferenceManager preferenceManager = new PreferenceManager(MainActivity.this);
+
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigation);
 
 
 //         Comment lines 60-71 if compiling when user is not logged out
-        Intent intent = getIntent();
-        zipcode = intent.getExtras().getString("zipcode");
-        radius = intent.getExtras().getString("radius");
-        opened = intent.getExtras().getString("opened");
-        cuisines = (ArrayList<String>) getIntent().getSerializableExtra("cuisines");
+//        Intent intent = getIntent();
+//        zipcode = intent.getExtras().getString("zipcode");
+//        radius = intent.getExtras().getString("radius");
+//        opened = intent.getExtras().getString("opened");
+//        cuisines = (ArrayList<String>) getIntent().getSerializableExtra("cuisines");
+//
+//        mainZipCode.setText(zipcode);
+//        mainMiles.setText(radius);
+//        mainOpened.setText(opened);
+//        mainCuisine.setText(cuisines.get(0));
+//
+//        jsonParse();
 
-        mainZipCode.setText(zipcode);
-        mainMiles.setText(radius);
-        mainOpened.setText(opened);
-        mainCuisine.setText(cuisines.get(0));
+        btnShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                testUid.append(preferenceManager.getUserPrefs(uid));
+            }
+        });
 
-        jsonParse();
+        btnDeletePrefs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                preferenceManager.removePrefs(uid);
+            }
+        });
     }
 
     private void jsonParse() {

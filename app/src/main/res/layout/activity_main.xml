@@ -86,7 +86,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="128dp"
-        android:text="Button" />
+        android:layout_marginBottom="180dp"
+        android:text="Show" />
+
+    <Button
+        android:id="@+id/btnDeletePrefs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="81dp"
+        android:text="Delete" />
 
 </RelativeLayout>
