@@ -55,6 +55,22 @@ public class PreferenceManager {
         editor.apply();
     }
 
+    public ArrayList<Restaurant> getAllRestaurants() {
+        ArrayList<Restaurant> restaurants = new ArrayList<>();
+
+        for (String entry : restaurantPreferences.getAll().keySet()) {
+            Gson gson = new Gson();
+            String json = restaurantPreferences.getString(entry, null);
+            Restaurant obj = gson.fromJson(json, Restaurant.class);
+            
+            if (entry != null) {
+                restaurants.add(obj);
+            }
+        }
+
+        return restaurants;
+    }
+
     //Need to add restaurants to UserRestaurants before using this method
 //    public ArrayList<Restaurant> getRestaurant(String uId) {
 //        ArrayList<Restaurant> restaurants = new ArrayList<>();
